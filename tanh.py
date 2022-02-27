@@ -1,11 +1,13 @@
 from Layer import Layer
+
 import numpy as np
 
 
 class Tanh(Layer):
-
-    def forward_pass(self, x):
+    def __init__(self, x):
         self.input = x
+
+    def forward_pass(self):
         return np.tanh(self.input)
 
     def backward_pass(self, error, alpha=0.001):

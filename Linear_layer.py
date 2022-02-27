@@ -15,8 +15,9 @@ class LinearLayer(Layer):
 
     # computes dE/dW, dE/dB for a given output_error=dE/dY. Returns input_error=dE/dX.
     def backward_pass(self, error, alpha=0.001):
+
         d_layer_weights = error.T @ np.concatenate((np.ones((self.input.shape[0], 1)), self.input), axis=1)
         # update parameters
         self.weights = self.weights + alpha * d_layer_weights
-        #error_in =
+        error_in = np.dot(error, self.weights[:,1:])
         return self.weights

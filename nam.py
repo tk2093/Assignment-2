@@ -34,20 +34,21 @@ for j in range(101):
 
         # Input hidden Layer
         a1 = layer1.forward_pass(x_train[i:i+1, :])
-        z1 = Tanh().forward_pass(a1)
+        z1 = Tanh(a1).forward_pass()
         # output layer
         a2 = outputlayer.forward_pass(z1.T)
-        z2 = Tanh().forward_pass(a2)
+        z2 = Tanh(a2).forward_pass()
 
         # Backward pass
 
         # Output layer
         error = mse_grad(z2, y_train[i:i+1, :])
-        error = Tanh().backward_pass(error)
+        error = Tanh(a2).backward_pass(error)
         error = outputlayer.backward_pass(error)
         # Input hidden Layer
-        error = Tanh().backward_pass(error)
-        error = layer1.backward_pass(error)
+        error = Tanh(a1).backward_pass(error)
+        #error = \
+        layer1.backward_pass(error)
 
 prediction = []
 
