@@ -20,4 +20,4 @@ class LinearLayer(Layer):
         # update parameters
         self.weights = self.weights + alpha * d_layer_weights
         error_in = np.dot(error, self.weights[:,1:])
-        return self.weights
+        return error_in

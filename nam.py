@@ -24,9 +24,10 @@ y_train = np.array([[0],
 
 # Initializing input hidden Layer
 layer1 = LL(2,2)
-
+activation1= Tanh()
 # Initializing output layer
 outputlayer = LL(2,1)
+activation2 = Tanh()
 
 for j in range(101):
     for i in range(len(y_train)):
@@ -34,26 +35,28 @@ for j in range(101):
 
         # Input hidden Layer
         a1 = layer1.forward_pass(x_train[i:i+1, :])
-        z1 = Tanh(a1).forward_pass()
+        z1 = activation1.forward_pass(a1)
         # output layer
         a2 = outputlayer.forward_pass(z1.T)
-        z2 = Tanh(a2).forward_pass()
+        z2 = activation2.forward_pass(a2)
 
         # Backward pass
 
         # Output layer
         error = mse_grad(z2, y_train[i:i+1, :])
-        error = Tanh(a2).backward_pass(error)
+        error = activation2.backward_pass(error)
         error = outputlayer.backward_pass(error)
         # Input hidden Layer
-        error = Tanh(a1).backward_pass(error)
+        error = activation1.backward_pass(error)
         #error = \
-        layer1.backward_pass(error)
+        error = layer1.backward_pass(error)
 
 prediction = []
 
 for i in range(len(y_train)):
     pred = x_train[i:i+1, :]
     pred = layer1.forward_pass(pred)
+    pred = activation1.forward_pass(pred)
     pred = outputlayer.forward_pass(pred.T)
+    pred = activation2.forward_pass(pred)
     prediction.append(pred)
