@@ -1,7 +1,8 @@
-from Linear_layer import LinearLayer as LL
+from Linear_layer import LinearLayer as Ll
 from tanh import Tanh
 from sigmoid import Sigmoid
 import numpy as np
+import pickle
 
 
 def mse(pred, target):
@@ -31,10 +32,10 @@ y_train = np.array([[0],
 # Forward Pass
 
 # Initializing input hidden Layer
-layer1 = LL(2,2)
+layer1 = Ll(2,2)
 activation1= Tanh()
 # Initializing output layer
-outputlayer = LL(2,1)
+outputlayer = Ll(2,1)
 activation2 = Tanh()
 
 for j in range(1000):
@@ -73,3 +74,9 @@ for i in range(len(y_train)):
     pred = activation2.forward_pass(pred)
     print(i, pred)
     prediction.append(pred)
+
+wlayer= [layer1.weights, outputlayer.weights]
+
+with open('xor_weights.w', 'wb') as fp:
+    pickle.dump(wlayer, fp)
+
