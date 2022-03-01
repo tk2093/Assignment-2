@@ -12,6 +12,14 @@ def mse_grad(pred, target):
     return 2*(pred-target)/target.size
 
 
+def cross_entropy_loss(pred, target):
+    return -target * np.log(pred)
+
+
+def cross_entropy_loss_grad(pred, target):
+    return target - pred
+
+
 x_train = np.array([[0,0],
                     [0,1],
                     [1,0],
@@ -29,7 +37,7 @@ activation1= Tanh()
 outputlayer = LL(2,1)
 activation2 = Tanh()
 
-for j in range(101):
+for j in range(1000):
     for i in range(len(y_train)):
         # forward pass
 
@@ -37,7 +45,7 @@ for j in range(101):
         a1 = layer1.forward_pass(x_train[i:i+1, :])
         z1 = activation1.forward_pass(a1)
         # output layer
-        a2 = outputlayer.forward_pass(z1.T)
+        a2 = outputlayer.forward_pass(z1)
         z2 = activation2.forward_pass(a2)
 
         # Backward pass
@@ -55,8 +63,13 @@ prediction = []
 
 for i in range(len(y_train)):
     pred = x_train[i:i+1, :]
+    print(i, pred)
     pred = layer1.forward_pass(pred)
+    print(i, pred)
     pred = activation1.forward_pass(pred)
-    pred = outputlayer.forward_pass(pred.T)
+    print(i, pred)
+    pred = outputlayer.forward_pass(pred)
+    print(i, pred)
     pred = activation2.forward_pass(pred)
+    print(i, pred)
     prediction.append(pred)

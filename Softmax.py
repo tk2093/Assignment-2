@@ -10,7 +10,7 @@ class Softmax(Layer):
         self.output = num / np.sum(num, axis=0, keepdims=True)
         return self.output
 
-    def backward_pass(self, probs, bp_err):
+    def backward_pass(self, error, alpha=0.001):
         self.output = probs
         dim = self.output.shape[1]
         output = np.empty(self.output.shape)
