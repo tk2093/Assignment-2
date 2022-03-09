@@ -15,8 +15,8 @@ class Network:
     def create(self, layer):
         self.layers.append(layer)
 
-    def fit(self, X, y, batch_size, alpha=0.01, x_val=None, y_val=None, stop_train=5, brk=1000):
-        train_loss = []
+    def fit(self, X, y, batch_size=32, alpha=0.01, x_val=None, y_val=None, stop_train=5, brk=1000):
+        train_loss = [100]
         val_loss = []
         i, j = 0, 0
         #for step in range(steps):
@@ -37,7 +37,7 @@ class Network:
                 dz = self.error_grad(y_pred_temp, y_temp.reshape(y_pred_temp.shape))
                 for layer in reversed(self.layers):
                     dz = layer.backward_pass(dz, alpha)
-            if len(train_loss)>5 and (batch_error/batch_size) > min(train_loss[-5:]):
+            if round((batch_error/batch_size),4) > round(train_loss[-1],4):
                 i += 1
             else:
                 i = 0

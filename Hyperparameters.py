@@ -45,29 +45,28 @@ y_cv = data[5]
 
 nn = Network()
 layer1 = Ll(784,400)
-layer1.weights = np.zeros((785,400))
+layer1.weights = np.random.rand(785,400)*20-10 #np.zeros((785,400))
 nn.create(layer1)
 act1 = Tanh()
 nn.create(act1)
 layer2 = Ll(400,100)
-layer2.weights = np.zeros((401,100))
+layer2.weights = np.random.rand(401,100)*20-10 #np.zeros((401,100))
 nn.create(layer2)
 act2 = Tanh()
 nn.create(act2)
 layer3 = Ll(100,50)
-layer3.weights = np.zeros((101,50))
+layer3.weights = np.random.rand(101,50)*20-10 #np.zeros((101,50))
 nn.create(layer3)
 act3 = Tanh()
 nn.create(act3)
 layer4 = Ll(50,10)
-layer4.weights = np.zeros((51,10))
+layer4.weights = np.random.rand(51,10)*20-10 #np.zeros((51,10))
 nn.create(layer4)
 act4 = Softmax(10)
 nn.create(act4)
-
-
 nn.losses(mse, mse_grad)
-train_loss, val_loss = nn.fit(X_train, y_train, 32, 0.01, X_cv, y_cv, brk=5000) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
+
+train_loss, val_loss = nn.fit(X_train, y_train, 32, 0.01, X_cv, y_cv, brk=2000) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
 pred = nn.predict(X_cv)
 val_error = mse(np.array(pred).reshape(np.array(pred).shape[0],10),y_cv)
 plt.plot(train_loss)
