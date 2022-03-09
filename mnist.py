@@ -32,6 +32,7 @@ def cross_entropy_loss_grad(pred, target):
 
 
 samples, targets = fetch_openml("mnist_784", version=1, return_X_y=True, as_frame=False)
+samples = samples.reshape(samples.shape[0],1,784)
 targets = targets.astype(int)
 X_train, X_test, y_train, y_test = train_test_split(samples, targets, test_size=10000, random_state=42)
 #(X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -43,6 +44,7 @@ y_train = get_one_hot(y_train, 10)
 y_test = get_one_hot(y_test, 10)
 
 X_train, X_cv, y_train, y_cv = train_test_split(X_train, y_train, test_size=0.1, random_state=42)
+
 
 # # Initializing input  Layer
 # layer1 = Ll(784,100)
@@ -108,20 +110,22 @@ X_train, X_cv, y_train, y_cv = train_test_split(X_train, y_train, test_size=0.1,
 
 
 nn = Network()
-layer1 = Ll(2,2)
+layer1 = Ll(784,250)
 nn.create(layer1)
 act1 = Tanh()
 nn.create(act1)
-layer2 = Ll(2,1)
+layer2 = Ll(250,100)
 nn.create(layer2)
 act2 = Tanh()
 nn.create(act2)
+layer3 = Ll(100,10)
+nn.create(layer3)
+act3 = Tanh()
+nn.create(act3)
 
 nn.losses(mse, mse_grad)
-loss = nn.fit(X_train, y_train, 1000, 32, 0.1)
+loss = nn.fit(X_train, y_train, 32, 0.01)
 pred = nn.predict(X_cv)
-
-
-
+val_error = mse(np.array(pred),y_cv)
 plt.plot(loss)
 plt.show()
