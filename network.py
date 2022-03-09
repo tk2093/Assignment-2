@@ -15,13 +15,15 @@ class Network:
     def create(self, layer):
         self.layers.append(layer)
 
-    def fit(self, X, y, batch_size, alpha=0.01, x_val=None, y_val=None, stop_train=5):
-        train_loss = [100]
+    def fit(self, X, y, batch_size, alpha=0.01, x_val=None, y_val=None, stop_train=5, brk=1000):
+        train_loss = []
         val_loss = []
         i, j = 0, 0
         #for step in range(steps):
         while i < stop_train+1:
+            if j > brk: break
             j += 1
+            print(j)
             batch_error = 0
             idx = random.sample(range(X.shape[0]), batch_size)
             for row in zip(X[idx],y[idx]):
@@ -35,7 +37,7 @@ class Network:
                 dz = self.error_grad(y_pred_temp, y_temp.reshape(y_pred_temp.shape))
                 for layer in reversed(self.layers):
                     dz = layer.backward_pass(dz, alpha)
-            if (batch_error/batch_size) > train_loss[-1]:
+            if len(train_loss)>5 and (batch_error/batch_size) > min(train_loss[-5:]):
                 i += 1
             else:
                 i = 0
