@@ -10,6 +10,6 @@ class Tanh(Layer):
         self.input = x
         return np.tanh(self.input)
 
-    def backward_pass(self, error, alpha=0.1):
-        self.output = (1 - np.tanh(self.input) ** 2) * error
+    def backward_pass(self, dz, alpha=0.1):
+        self.output = (1 - np.tanh(self.input) ** 2) * dz
         return self.output

@@ -7,5 +7,5 @@ class Layer:
     def forward_pass(self, x):
         pass
 
-    def backward_pass(self, error, alpha=0.1):
+    def backward_pass(self, dz, alpha=0.1):
         pass

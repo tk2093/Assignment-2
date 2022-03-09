@@ -11,5 +11,5 @@ class Sigmoid(Layer):
         self.output = 1. / (1. + np.exp(-self.input))
         return self.output
 
-    def backward_pass(self, error, alpha=0.001):
-        return self.output * (1 - self.output) * error
+    def backward_pass(self, dz, alpha=0.1):
+        return self.output * (1 - self.output) * dz
