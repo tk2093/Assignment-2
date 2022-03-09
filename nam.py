@@ -44,7 +44,7 @@ act2 = Tanh()
 nn.create(act2)
 
 nn.losses(mse, mse_grad)
-loss = nn.fit(x_train.reshape(x_train.shape[0],1,2), y_train, 4, 0.1, 5)
+loss = nn.fit(x_train.reshape(x_train.shape[0],1,2), y_train, 4, 0.1, 5)  #Please run again if stuck at step<300
 pred = nn.predict(x_train.reshape(x_train.shape[0],1,2))
 error = mse(np.array(pred).reshape(4,1),y_train)
 plt.plot(loss)

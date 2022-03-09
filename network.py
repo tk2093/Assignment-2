@@ -16,7 +16,7 @@ class Network:
         self.layers.append(layer)
 
     def fit(self, X, y, batch_size, alpha=0.01, stop_train=5):
-        loss = [0]
+        loss = [100]
         i=0
         #for step in range(steps):
         while i < stop_train:

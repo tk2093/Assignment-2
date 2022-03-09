@@ -4,16 +4,8 @@ from tanh import Tanh
 from sigmoid import Sigmoid
 import numpy as np
 import pickle
-from sklearn.datasets import fetch_openml
-from sklearn.model_selection import train_test_split
-#from keras.datasets import mnist
 import matplotlib.pyplot as plt
 
-
-
-def get_one_hot(targets_in, nb_classes):
-    res = np.eye(nb_classes)[np.array(targets_in).reshape(-1)]
-    return res.reshape(list(targets_in.shape)+[nb_classes])
 
 def mse(pred, target):
     return np.mean(np.power(target-pred, 2))
@@ -31,20 +23,24 @@ def cross_entropy_loss_grad(pred, target):
     return target - pred
 
 
-samples, targets = fetch_openml("mnist_784", version=1, return_X_y=True, as_frame=False)
-samples = samples.reshape(samples.shape[0],1,784)
-targets = targets.astype(int)
-X_train, X_test, y_train, y_test = train_test_split(samples, targets, test_size=10000, random_state=42)
-#(X_train, y_train), (X_test, y_test) = mnist.load_data()
+def accuracy(pred, target):
+    acc = 0
+    for i in range(len(target)):
+        if np.argmax(pred[i]) == np.argmax(target):
+            acc +=1
+    return acc/len(target)
 
-X_train = X_train/255.
-X_test = X_test/255.
 
-y_train = get_one_hot(y_train, 10)
-y_test = get_one_hot(y_test, 10)
+# pickle saved by running mnist_load.py
+with open("mnist.pkl", "br") as fh:
+    data = pickle.load(fh)
 
-X_train, X_cv, y_train, y_cv = train_test_split(X_train, y_train, test_size=0.1, random_state=42)
-
+X_train = data[0]
+X_test = data[1]
+X_cv = data[2]
+y_train = data[3]
+y_test = data[4]
+y_cv = data[5]
 
 # # Initializing input  Layer
 # layer1 = Ll(784,100)
@@ -129,3 +125,29 @@ pred = nn.predict(X_cv)
 val_error = mse(np.array(pred),y_cv)
 plt.plot(loss)
 plt.show()
+
+val_acc = accuracy(np.array(pred),y_cv)
+test_acc = accuracy(np.array(nn.predict(X_test)), y_test)
+
+
+#saving weights
+weights = []
+for i in range(0,len(nn.layers),2):
+    weights.append(nn.layers[i].weights)
+
+with open('mnist_weights.w', 'wb') as file:
+    pickle.dump(weights, file)
+
+#Uncomment to load weights and make predictions
+#loading weights
+#
+# with open('mnist_weights.w', 'rb') as file:
+#     load_weights = pickle.load(file)
+# j=0
+# for i in range(0,len(nn.layers),2):
+#     nn.layers[i].weights = load_weights[j]
+#     j += 1
+
+# pred = nn.predict(x_train.reshape(x_train.shape[0],1,2))
+# error = mse(np.array(pred).reshape(4,1),y_train)
+
