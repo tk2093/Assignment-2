@@ -32,7 +32,7 @@ y_train = np.array([[0],
                     [1],
                     [0]])
 
-
+x_train = x_train.reshape(x_train.shape[0],1,2)
 nn = Network()
 layer1 = Ll(2,2)
 nn.create(layer1)
@@ -44,8 +44,8 @@ act2 = Tanh()
 nn.create(act2)
 
 nn.losses(mse, mse_grad)
-loss = nn.fit(x_train.reshape(x_train.shape[0],1,2), y_train, 4, 0.1, 5)  #Please run again if stuck at step<300
-pred = nn.predict(x_train.reshape(x_train.shape[0],1,2))
+loss = nn.fit(x_train, y_train, 4, 0.1, 5)  #Please run again if stuck at step<300
+pred = nn.predict(x_train)
 error = mse(np.array(pred).reshape(4,1),y_train)
 plt.plot(loss)
 plt.show()

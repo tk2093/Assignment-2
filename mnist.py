@@ -1,6 +1,7 @@
 from Linear_layer import LinearLayer as Ll
 from network import Network
 from tanh import Tanh
+from Softmax import Softmax
 from sigmoid import Sigmoid
 import numpy as np
 import pickle
@@ -26,7 +27,7 @@ def cross_entropy_loss_grad(pred, target):
 def accuracy(pred, target):
     acc = 0
     for i in range(len(target)):
-        if np.argmax(pred[i]) == np.argmax(target):
+        if np.argmax(pred[i]) == np.argmax(target[i]):
             acc +=1
     return acc/len(target)
 
@@ -104,26 +105,36 @@ y_cv = data[5]
 #     #pred.append(z3)
 #
 
-
+# Model 1: Hidden layer 1 total layers 3, learning rate 0.1, Batch size 32, activation: Tanh and Softmax
 nn = Network()
-layer1 = Ll(784,250)
+layer1 = Ll(784,400)
 nn.create(layer1)
 act1 = Tanh()
 nn.create(act1)
-layer2 = Ll(250,100)
+layer2 = Ll(400,100)
 nn.create(layer2)
 act2 = Tanh()
 nn.create(act2)
-layer3 = Ll(100,10)
+layer3 = Ll(100,50)
 nn.create(layer3)
 act3 = Tanh()
 nn.create(act3)
+layer4 = Ll(50,10)
+nn.create(layer4)
+act4 = Softmax(10)
+nn.create(act4)
 
 nn.losses(mse, mse_grad)
-loss = nn.fit(X_train, y_train, 32, 0.01)
+train_loss, val_loss = nn.fit(X_train, y_train, 32, 0.1, X_cv, y_cv)
 pred = nn.predict(X_cv)
-val_error = mse(np.array(pred),y_cv)
-plt.plot(loss)
+val_error = mse(np.array(pred).reshape(np.array(pred).shape[0],10),y_cv)
+plt.plot(train_loss)
+plt.title('Train Loss')
+plt.savefig('Train_loss.png')
+plt.show()
+plt.plot(val_loss)
+plt.title('Validation Loss')
+plt.savefig('val_loss.png')
 plt.show()
 
 val_acc = accuracy(np.array(pred),y_cv)
