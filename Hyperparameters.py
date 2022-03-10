@@ -1,5 +1,5 @@
 from Linear_layer import LinearLayer as Ll
-from network import Network
+from Sequence import Sequence
 from tanh import Tanh
 from Softmax import Softmax
 from sigmoid import Sigmoid
@@ -43,7 +43,7 @@ y_train = data[3]
 y_test = data[4]
 y_cv = data[5]
 
-nn = Network()
+nn = Sequence()
 layer1 = Ll(784,400)
 nn.create(layer1)
 act1 = Tanh()
@@ -70,12 +70,12 @@ nn.losses(mse, mse_grad)
 # layer2.weights = np.random.rand(401,100)*20-10 #np.zeros((401,100))
 # layer3.weights = np.random.rand(101,50)*20-10 #np.zeros((101,50))
 # layer4.weights = np.random.rand(51,10)*20-10 #np.zeros((51,10))
-for i in range(0,len(nn.layers),2):
-    # nn.layers[i].weights = np.random.rand(nn.layers[i].weights.shape[0],nn.layers[i].weights.shape[1])*20-10
-    nn.layers[i].weights = np.zeros(nn.layers[i].weights.shape)
-    print('loop:',i)
+# for i in range(0,len(nn.layers),2):
+#     nn.layers[i].weights = np.random.rand(nn.layers[i].weights.shape[0],nn.layers[i].weights.shape[1])*20-10
+#     # nn.layers[i].weights = np.zeros(nn.layers[i].weights.shape)
+#     print('loop:',i)
 
-train_loss, val_loss = nn.fit(X_train, y_train, 32, 0.01, X_cv, y_cv, brk=500) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
+train_loss, val_loss = nn.fit(X_train, y_train, 32, 1, X_cv, y_cv, brk=1000) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
 pred = nn.predict(X_cv)
 val_error = mse(np.array(pred).reshape(np.array(pred).shape[0],10),y_cv)
 plt.plot(train_loss)

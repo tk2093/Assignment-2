@@ -1,16 +1,18 @@
 import random
+from Layer import Layer
 import numpy as np
 
-class Network:
+
+class Sequence(Layer):
 
     def __init__(self):
         self.layers = []
         self.error = None
         self.error_grad = None
 
-    def losses(self, func, func_grad):
+    def losses(self, func):
         self.error = func
-        self.error_grad = func_grad
+        self.error_grad = func
 
     def create(self, layer):
         self.layers.append(layer)
@@ -32,18 +34,18 @@ class Network:
                 for layer in self.layers:
                     y_pred_temp = layer.forward_pass(y_pred_temp)
 
-                batch_error += self.error(y_pred_temp, y_temp.reshape(y_pred_temp.shape))
+                batch_error += self.error.forward(y_pred_temp, y_temp.reshape(y_pred_temp.shape))
 
-                dz = self.error_grad(y_pred_temp, y_temp.reshape(y_pred_temp.shape))
+                dz = self.error_grad.backward(y_pred_temp, y_temp.reshape(y_pred_temp.shape))
                 for layer in reversed(self.layers):
                     dz = layer.backward_pass(dz, alpha)
-            if round((batch_error/batch_size),4) > round(train_loss[-1],4):
+            if round((batch_error/batch_size),4) >= round(train_loss[-1],4):
                 i += 1
             else:
                 i = 0
             train_loss.append(batch_error/batch_size)
             if x_val is not None and ((j % 50) == 0):
-                val_loss.append(self.error(np.array(self.predict(x_val)).reshape(y_val.shape),y_val))
+                val_loss.append(self.error.forward(np.array(self.predict(x_val)).reshape(y_val.shape),y_val))
         if x_val is not None:
             return train_loss[1:], val_loss
         else:

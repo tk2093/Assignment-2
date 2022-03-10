@@ -15,6 +15,5 @@ class LinearLayer(Layer):
     def backward_pass(self, dz, alpha=0.1):
         d_layer_weights = np.concatenate((np.ones((self.input.shape[0], 1)), self.input), axis=1).T @ dz
         self.weights = self.weights - alpha * d_layer_weights
-        #print(self.weights)
         self.output = np.dot(dz, self.weights[1:,:].T)
         return self.output
