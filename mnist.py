@@ -1,3 +1,5 @@
+"""please run mnist_load.py before running this"""
+
 from Linear_layer import LinearLayer as Ll
 from network import Network
 from tanh import Tanh
@@ -34,7 +36,7 @@ def accuracy(pred, target):
 
 # pickle saved by running mnist_load.py
 with open("mnist.pkl", "br") as fh:
-    data = pickle.load(fh)
+    data = pickle.load(fh)              # please run mnist_load.py before running this
 
 X_train = data[0]
 X_test = data[1]
@@ -46,7 +48,7 @@ y_cv = data[5]
 
 # Model 1: Hidden layer 2 total layers 4 (784, 400, 100, 50 ,10), learning rate 0.1, Batch size 32, activation: Tanh and Softmax
 # Model 2: Hidden layer 1 total layers 3 (784, 250, 50, 10), learning rate 0.1, batch size 32, activation: Tanh Softmax
-# Model 3: Hidden layer 3 total layers 5 (784, 500, 300, 200, 100, 50, 10), learning rate 0.01, Batch size = 32, activation Tanh Softmax
+# Model 3: Hidden layer 3 total layers 5 (784, 500, 300, 100, 50, 10), learning rate 0.01, Batch size = 32, activation Tanh Softmax
 nn = Network()
 layer1 = Ll(784,500)
 nn.create(layer1)
