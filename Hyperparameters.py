@@ -1,27 +1,12 @@
 from Linear_layer import LinearLayer as Ll
 from Sequence import Sequence
+from Loss import MSE
 from tanh import Tanh
 from Softmax import Softmax
 from sigmoid import Sigmoid
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
-
-
-def mse(pred, target):
-    return np.mean(np.power(target-pred, 2))
-
-
-def mse_grad(pred, target):
-    return 2*(pred-target)/target.size
-
-
-def cross_entropy_loss(pred, target):
-    return -target * np.log(pred)
-
-
-def cross_entropy_loss_grad(pred, target):
-    return target - pred
 
 
 def accuracy(pred, target):
@@ -64,20 +49,16 @@ nn.create(layer4)
 act4 = Softmax(10)
 nn.create(act4)
 
-nn.losses(mse, mse_grad)
+nn.losses(MSE)
 
-# layer1.weights = np.random.rand(785,400)*20-10 #np.zeros((785,400))
-# layer2.weights = np.random.rand(401,100)*20-10 #np.zeros((401,100))
-# layer3.weights = np.random.rand(101,50)*20-10 #np.zeros((101,50))
-# layer4.weights = np.random.rand(51,10)*20-10 #np.zeros((51,10))
 # for i in range(0,len(nn.layers),2):
 #     nn.layers[i].weights = np.random.rand(nn.layers[i].weights.shape[0],nn.layers[i].weights.shape[1])*20-10
 #     # nn.layers[i].weights = np.zeros(nn.layers[i].weights.shape)
 #     print('loop:',i)
 
-train_loss, val_loss = nn.fit(X_train, y_train, 32, 1, X_cv, y_cv, brk=1000) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
+train_loss, val_loss = nn.fit(X_train, y_train, 32, 0.1, X_cv, y_cv, brk=10000) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
 pred = nn.predict(X_cv)
-val_error = mse(np.array(pred).reshape(np.array(pred).shape[0],10),y_cv)
+
 plt.plot(train_loss)
 plt.title('Train Loss for Model')
 plt.savefig('Model_Train_loss.png')

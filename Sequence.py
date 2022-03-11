@@ -25,7 +25,7 @@ class Sequence(Layer):
         while i < stop_train+1:
             if j > brk: break
             j += 1
-            print(j)
+            print('Step: ',j)
             batch_error = 0
             idx = random.sample(range(X.shape[0]), batch_size)
             for row in zip(X[idx],y[idx]):

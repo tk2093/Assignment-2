@@ -5,7 +5,6 @@ from Sequence import Sequence
 from tanh import Tanh
 from Softmax import Softmax
 from Loss import MSE, XentLoss
-from sigmoid import Sigmoid
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
@@ -48,11 +47,11 @@ nn.create(layer4)
 act4 = Softmax(10)
 nn.create(act4)
 
-nn.losses(XentLoss)
+nn.losses(MSE)
 
 train_loss, val_loss = nn.fit(X_train, y_train, 32, 0.1, X_cv, y_cv, stop_train=5, brk=5000) # model may run for a very long time, please put "brk = 1000" to break after 1000 steps
 pred = nn.predict(X_cv)
-#val_error = XentLoss.forward(np.array(pred).reshape(np.array(pred).shape[0],10),y_cv)
+
 plt.plot(train_loss)
 plt.title('Train Loss for Model 1')
 plt.savefig('Model1_Train_loss.png')
